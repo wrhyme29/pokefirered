@@ -746,12 +746,23 @@
 #define TRAINER_CHAMPION_REMATCH_BULBASAUR       740
 #define TRAINER_CHAMPION_REMATCH_CHARMANDER      741
 #define TRAINER_CUE_BALL_PAXTON                  742
+#define TRAINER_POKEFAN_ALIZA_ZERO_BADGES        743
+#define TRAINER_POKEFAN_ALIZA_ONE_BADGE          744
+#define TRAINER_POKEFAN_ALIZA_TWO_BADGES         745
+#define TRAINER_POKEFAN_ALIZA_THREE_BADGES       746
+#define TRAINER_POKEFAN_ALIZA_FOUR_BADGES        747
+#define TRAINER_POKEFAN_ALIZA_FIVE_BADGES        748
+#define TRAINER_POKEFAN_ALIZA_SIX_BADGES         749
+#define TRAINER_POKEFAN_ALIZA_SEVEN_BADGES       750
+#define TRAINER_POKEFAN_ALIZA_EIGHT_BADGES       751
+
+
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is 
 //       only space for 25 additional trainers before trainer flag space overflows.
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
 
-#define NUM_TRAINERS                             743
+#define NUM_TRAINERS                             752
 #define MAX_TRAINERS_COUNT                       768
 
 #endif  // GUARD_CONSTANTS_OPPONENTS_H

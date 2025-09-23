@@ -29,6 +29,109 @@ PalletTown_Text_PlayersHouse::
 PalletTown_Text_RivalsHouse::
     .string "{RIVAL}'s house$"
 
+PalletTown_Text_Aliza_NoPokemon::
+    .string "Come back when you have a Pokémon!$"
+
+PalletTown_Text_Aliza_BadgeCount::
+    .string "Badge count is {STR_VAR_1}.$"
+
+PalletTown_Text_Aliza_AlreadyWon::
+    .string "Thanks for the battle! Come back\n"
+    .string "when you get the next badge!$"
+
+PalletTown_Text_Aliza_WonAll::
+    .string "Good luck with the Elite Four!$"
+
+PalletTown_Text_Aliza_BattleDeclined::
+    .string "No worries! Come back when you are\n"
+    .string "ready!$"
+
+PalletTown_Text_Aliza_BattleZeroAsk::
+    .string "Hi {PLAYER} - my name is ALIZA!\n"
+    .string "I would love to be a rival!\p"
+    .string "Want to give it a shot?$"
+
+PalletTown_Text_Aliza_BattleZeroWon::
+    .string "That was fun! Come back after every\n"
+    .string "badge to test your strength!$"
+
+PalletTown_Text_Aliza_BattleOneAsk::
+    .string "Brock told me you beat him?\n"
+    .string "Thats your first badge! Nice!\p"
+    .string "Want to see if you are really ready \n"
+    .string "to go for the others?$"
+
+PalletTown_Text_Aliza_BattleOneWon::
+    .string "That was fun! Come back after every\n"
+    .string "badge to test your strength!$"
+
+PalletTown_Text_Aliza_BattleTwoAsk::
+    .string "My Pikachu and I will shock you with\n" 
+    .string "our strength!\p"
+    .string "{PLAYER}, are your charged up?$"
+
+PalletTown_Text_Aliza_BattleTwoWon::
+    .string "After that, you can totally take on\n"
+    .string "Misty!$"
+
+PalletTown_Text_Aliza_BattleThreeAsk::
+    .string "{RIVAL} told me you whooped him on\n"
+    .string "SS Anne? Wow, you are really good!\p"
+    .string "But are you better than me?$"
+
+PalletTown_Text_Aliza_BattleThreeWon::
+    .string "If my Pikachu cannot do it, Lt. Surge is \n" 
+    .string "going to have his hands full with you!$"
+
+
+PalletTown_Text_Aliza_BattleFourAsk::
+    .string "{RIVAL} has been keeping me up on\n"
+    .string "your journey - I am so proud of your\p"
+    .string "progress!\p"
+    .string "Ready to see if it is really enough?$"
+
+PalletTown_Text_Aliza_BattleFourWon::
+    .string "{PLAYER}, you are turning into \n"
+    .string "quite the trainer!$"
+
+PalletTown_Text_Aliza_BattleFiveAsk::
+    .string "Ever seen a Snorlax before?$"
+
+PalletTown_Text_Aliza_BattleFiveWon::
+    .string "Wow, {PLAYER} - you are getting\n" 
+    .string "really good!$"
+
+PalletTown_Text_Aliza_BattleSixAsk::
+    .string "{PLAYER}, I am ready for you!\n"
+    .string "I have a few surprises up my sleeve!\p"
+    .string "Want to go?$"
+
+PalletTown_Text_Aliza_BattleSixWon::
+    .string "The way you are going, every gym\n"
+    .string "leader needs to watch out!$"
+
+PalletTown_Text_Aliza_BattleSevenAsk::
+    .string "{PLAYER}, you took down Team Rocket???\p"
+    .string "Now I need to see how I fare against\n" 
+    .string "you.\p"
+    .string "Are you ready?$"
+
+PalletTown_Text_Aliza_BattleSevenWon::
+    .string "Nice work, {PLAYER}! Now go get\n"
+    .string "that last badge!$"
+
+PalletTown_Text_Aliza_BattleEightAsk::
+    .string "{PLAYER}, I heard you got the Earth\n"
+    .string "Badge!\p"
+    .string "That means you can challenge the\n" 
+    .string "Elite Four!\p"
+    .string "Before you do, do you want a final\n"
+    .string "challenge?$"
+
+PalletTown_Text_Aliza_BattleEightWon::
+    .string "You are so impressive, {PLAYER}!\n"
+    .string "Good luck with the Elite 4!$"
+
 PalletTown_Text_TownSign::
     .string "PALLET TOWN\n"
     .string "Shades of your journey await!$"
@@ -64,4 +167,3 @@ PalletTown_Text_OakYouEnjoyingTraveling::
     .string "exotic locales.\p"
     .string "Good for you, good for you.\n"
     .string "Hohoho.$"
-

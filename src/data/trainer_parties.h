@@ -3717,6 +3717,285 @@ static const struct TrainerMonItemDefaultMoves sParty_BlackBeltDaisuke[] = {
     },
 };
 
+static const struct TrainerMonItemCustomMoves sParty_AlizaZeroBadges[] = {
+    {
+        .iv = 250,
+        .lvl = 10,
+        .species = SPECIES_EEVEE,
+        .heldItem = ITEM_ORAN_BERRY,
+        .moves = {MOVE_TACKLE, MOVE_WISH},
+    },
+    {
+        .iv = 250,
+        .lvl = 13,
+        .species = SPECIES_PIKACHU,
+        .heldItem = ITEM_ORAN_BERRY,
+        .moves = {MOVE_THUNDER_SHOCK, MOVE_THUNDER_WAVE, MOVE_DOUBLE_TEAM},
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AlizaOneBadge[] = {
+    {
+        .iv = 250,
+        .lvl = 16,
+        .species = SPECIES_EEVEE,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = {MOVE_TACKLE, MOVE_WISH, MOVE_HIDDEN_POWER},
+    },
+    {
+        .iv = 250,
+        .lvl = 18,
+        .species = SPECIES_PIKACHU,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = {MOVE_THUNDER_SHOCK, MOVE_THUNDER_WAVE, MOVE_DOUBLE_TEAM, MOVE_QUICK_ATTACK},
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AlizaTwoBadges[] = {
+    {
+        .iv = 250,
+        .lvl = 20,
+        .species = SPECIES_EEVEE,
+        .heldItem = ITEM_QUICK_CLAW,
+        .moves = {MOVE_TACKLE, MOVE_DIG, MOVE_WISH, MOVE_HIDDEN_POWER},
+    },
+    {
+        .iv = 250,
+        .lvl = 18,
+        .species = SPECIES_TYROGUE,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = {MOVE_HI_JUMP_KICK, MOVE_ROCK_TOMB, MOVE_MACH_PUNCH},
+    },
+    {
+        .iv = 250,
+        .lvl = 22,
+        .species = SPECIES_PIKACHU,
+        .heldItem = ITEM_LIGHT_BALL,
+        .moves = {MOVE_THUNDER_SHOCK, MOVE_THUNDER_WAVE, MOVE_DOUBLE_TEAM, MOVE_IRON_TAIL},
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AlizaThreeBadges[] = {
+    {
+        .iv = 250,
+        .lvl = 25,
+        .species = SPECIES_EEVEE,
+        .heldItem = ITEM_QUICK_CLAW,
+        .moves = {MOVE_DIG, MOVE_TOXIC, MOVE_WISH, MOVE_ATTRACT},
+    },
+    {
+        .iv = 250,
+        .lvl = 22,
+        .species = SPECIES_HITMONLEE,
+        .heldItem = ITEM_BLACK_BELT,
+        .moves = {MOVE_HI_JUMP_KICK, MOVE_ROCK_TOMB, MOVE_MACH_PUNCH, MOVE_SECRET_POWER},
+    },
+    {
+        .iv = 250,
+        .lvl = 24,
+        .species = SPECIES_GASTLY,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = {MOVE_NIGHT_SHADE, MOVE_SLUDGE_BOMB, MOVE_PSYWAVE, MOVE_CURSE},
+    },
+    {
+        .iv = 250,
+        .lvl = 27,
+        .species = SPECIES_PIKACHU,
+        .heldItem = ITEM_LIGHT_BALL,
+        .moves = {MOVE_THUNDERBOLT, MOVE_THUNDER_WAVE, MOVE_DOUBLE_TEAM, MOVE_IRON_TAIL},
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AlizaFourBadges[] = {
+    {
+        .iv = 250,
+        .lvl = 30,
+        .species = SPECIES_EEVEE,
+        .heldItem = ITEM_QUICK_CLAW,
+        .moves = {MOVE_DIG, MOVE_TOXIC, MOVE_WISH, MOVE_PROTECT},
+    },
+    {
+        .iv = 250,
+        .lvl = 28,
+        .species = SPECIES_HITMONLEE,
+        .heldItem = ITEM_BLACK_BELT,
+        .moves = {MOVE_HI_JUMP_KICK, MOVE_ROCK_TOMB, MOVE_MACH_PUNCH, MOVE_BULK_UP},
+    },
+    {
+        .iv = 250,
+        .lvl = 31,
+        .species = SPECIES_HAUNTER,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = {MOVE_SHADOW_PUNCH, MOVE_SLUDGE_BOMB, MOVE_PSYWAVE, MOVE_CURSE},
+    },
+    {
+        .iv = 250,
+        .lvl = 33,
+        .species = SPECIES_PIKACHU,
+        .heldItem = ITEM_LIGHT_BALL,
+        .moves = {MOVE_THUNDERBOLT, MOVE_SURF, MOVE_DOUBLE_TEAM, MOVE_IRON_TAIL},
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AlizaFiveBadges[] = {
+    {
+        .iv = 250,
+        .lvl = 35,
+        .species = SPECIES_SNORLAX,
+        .heldItem = ITEM_CHESTO_BERRY,
+        .moves = {MOVE_BODY_SLAM, MOVE_REST, MOVE_CURSE, MOVE_ROCK_SLIDE},
+    },
+    {
+        .iv = 250,
+        .lvl = 35,
+        .species = SPECIES_EEVEE,
+        .heldItem = ITEM_QUICK_CLAW,
+        .moves = {MOVE_BITE, MOVE_TOXIC, MOVE_WISH, MOVE_PROTECT},
+    },
+    {
+        .iv = 250,
+        .lvl = 33,
+        .species = SPECIES_HITMONLEE,
+        .heldItem = ITEM_BLACK_BELT,
+        .moves = {MOVE_HI_JUMP_KICK, MOVE_ROCK_TOMB, MOVE_MACH_PUNCH, MOVE_BULK_UP},
+    },
+    {
+        .iv = 250,
+        .lvl = 36,
+        .species = SPECIES_HAUNTER,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = {MOVE_SHADOW_PUNCH, MOVE_SLUDGE_BOMB, MOVE_PSYCHIC, MOVE_CURSE},
+    },
+    {
+        .iv = 250,
+        .lvl = 38,
+        .species = SPECIES_PIKACHU,
+        .heldItem = ITEM_LIGHT_BALL,
+        .moves = {MOVE_THUNDERBOLT, MOVE_SURF, MOVE_DOUBLE_TEAM, MOVE_IRON_TAIL},
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AlizaSixBadges[] = {
+    {
+        .iv = 250,
+        .lvl = 41,
+        .species = SPECIES_SNORLAX,
+        .heldItem = ITEM_CHESTO_BERRY,
+        .moves = {MOVE_BODY_SLAM, MOVE_REST, MOVE_CURSE, MOVE_ROCK_SLIDE},
+    },
+    {
+        .iv = 250,
+        .lvl = 39,
+        .species = SPECIES_UMBREON,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves = {MOVE_BITE, MOVE_TOXIC, MOVE_WISH, MOVE_PROTECT},
+    },
+    {
+        .iv = 250,
+        .lvl = 37,
+        .species = SPECIES_HITMONLEE,
+        .heldItem = ITEM_BLACK_BELT,
+        .moves = {MOVE_HI_JUMP_KICK, MOVE_ROCK_TOMB, MOVE_MACH_PUNCH, MOVE_BULK_UP},
+    },
+    {
+        .iv = 250,
+        .lvl = 42,
+        .species = SPECIES_GENGAR,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = {MOVE_SHADOW_PUNCH, MOVE_SLUDGE_BOMB, MOVE_PSYCHIC, MOVE_CURSE},
+    },
+    {
+        .iv = 250,
+        .lvl = 45,
+        .species = SPECIES_PIKACHU,
+        .heldItem = ITEM_LIGHT_BALL,
+        .moves = {MOVE_THUNDERBOLT, MOVE_SURF, MOVE_DOUBLE_TEAM, MOVE_IRON_TAIL},
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AlizaSevenBadges[] = {
+    {
+        .iv = 250,
+        .lvl = 45,
+        .species = SPECIES_SNORLAX,
+        .heldItem = ITEM_CHESTO_BERRY,
+        .moves = {MOVE_BODY_SLAM, MOVE_REST, MOVE_CURSE, MOVE_ROCK_SLIDE},
+    },
+    {
+        .iv = 250,
+        .lvl = 42,
+        .species = SPECIES_UMBREON,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves = {MOVE_FAINT_ATTACK, MOVE_TOXIC, MOVE_WISH, MOVE_PROTECT},
+    },
+    {
+        .iv = 250,
+        .lvl = 40,
+        .species = SPECIES_HITMONLEE,
+        .heldItem = ITEM_BLACK_BELT,
+        .moves = {MOVE_HI_JUMP_KICK, MOVE_ROCK_TOMB, MOVE_MACH_PUNCH, MOVE_BULK_UP},
+    },
+    {
+        .iv = 250,
+        .lvl = 44,
+        .species = SPECIES_GENGAR,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = {MOVE_SHADOW_PUNCH, MOVE_SLUDGE_BOMB, MOVE_PSYCHIC, MOVE_CURSE},
+    },
+    {
+        .iv = 250,
+        .lvl = 47,
+        .species = SPECIES_PIKACHU,
+        .heldItem = ITEM_LIGHT_BALL,
+        .moves = {MOVE_THUNDERBOLT, MOVE_SURF, MOVE_DOUBLE_TEAM, MOVE_IRON_TAIL},
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AlizaEightBadges[] = {
+    {
+        .iv = 250,
+        .lvl = 51,
+        .species = SPECIES_SNORLAX,
+        .heldItem = ITEM_CHESTO_BERRY,
+        .moves = {MOVE_BODY_SLAM, MOVE_REST, MOVE_CURSE, MOVE_HYPER_BEAM},
+    },
+    {
+        .iv = 250,
+        .lvl = 48,
+        .species = SPECIES_UMBREON,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves = {MOVE_KNOCK_OFF, MOVE_TOXIC, MOVE_WISH, MOVE_PROTECT},
+    },
+    {
+        .iv = 250,
+        .lvl = 46,
+        .species = SPECIES_HITMONLEE,
+        .heldItem = ITEM_BLACK_BELT,
+        .moves = {MOVE_HI_JUMP_KICK, MOVE_EARTHQUAKE, MOVE_MACH_PUNCH, MOVE_BULK_UP},
+    },
+    {
+        .iv = 250,
+        .lvl = 50,
+        .species = SPECIES_GENGAR,
+        .heldItem = ITEM_FOCUS_BAND,
+        .moves = {MOVE_SHADOW_BALL, MOVE_SLUDGE_BOMB, MOVE_PSYCHIC, MOVE_CURSE},
+    },
+    {
+        .iv = 250,
+        .lvl = 50,
+        .species = SPECIES_JIRACHI,
+        .heldItem = ITEM_LAX_INCENSE,
+        .moves = {MOVE_BLIZZARD, MOVE_GIGA_DRAIN, MOVE_LEECH_SEED, MOVE_MUD_SHOT},
+    },
+    {
+        .iv = 250,
+        .lvl = 53,
+        .species = SPECIES_PIKACHU,
+        .heldItem = ITEM_LIGHT_BALL,
+        .moves = {MOVE_THUNDERBOLT, MOVE_SURF, MOVE_DOUBLE_TEAM, MOVE_IRON_TAIL},
+    },
+};
+
 static const struct TrainerMonNoItemDefaultMoves sParty_RivalOaksLabSquirtle[] = {
     {
         .iv = 0,

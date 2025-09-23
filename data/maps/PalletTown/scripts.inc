@@ -390,6 +390,138 @@ PalletTown_EventScript_FatMan::
 	msgbox PalletTown_Text_CanStoreItemsAndMonsInPC, MSGBOX_NPC
 	end
 
+PalletTown_EventScript_Aliza::
+  lock
+  faceplayer
+	specialvar VAR_RESULT, CalculatePlayerPartyCount
+	goto_if_eq VAR_RESULT, 0, PalletTown_EventScript_Aliza_NoPokemon
+  call PalletTown_EventScript_Aliza_CountBadges
+  call PalletTown_EventScript_Aliza_Greeting
+  release
+	end
+
+PalletTown_EventScript_Aliza_NoPokemon::
+	msgbox PalletTown_Text_Aliza_NoPokemon
+	release
+	end
+
+PalletTown_EventScript_Aliza_CountBadges::
+  setvar VAR_BADGE_COUNT 0
+  call_if_set FLAG_BADGE01_GET, PalletTown_EventScript_Aliza_IncrementBadgeCount
+  call_if_set FLAG_BADGE02_GET, PalletTown_EventScript_Aliza_IncrementBadgeCount
+  call_if_set FLAG_BADGE03_GET, PalletTown_EventScript_Aliza_IncrementBadgeCount
+  call_if_set FLAG_BADGE04_GET, PalletTown_EventScript_Aliza_IncrementBadgeCount
+  call_if_set FLAG_BADGE05_GET, PalletTown_EventScript_Aliza_IncrementBadgeCount
+  call_if_set FLAG_BADGE06_GET, PalletTown_EventScript_Aliza_IncrementBadgeCount
+  call_if_set FLAG_BADGE07_GET, PalletTown_EventScript_Aliza_IncrementBadgeCount
+  call_if_set FLAG_BADGE08_GET, PalletTown_EventScript_Aliza_IncrementBadgeCount
+  return
+
+PalletTown_EventScript_Aliza_IncrementBadgeCount::
+  addvar VAR_BADGE_COUNT 1
+  return
+
+PalletTown_EventScript_Aliza_Greeting::
+  buffernumberstring STR_VAR_1, VAR_BADGE_COUNT
+  msgbox PalletTown_Text_Aliza_BadgeCount
+  goto_if_eq VAR_BADGE_COUNT, 0, PalletTown_EventScript_Aliza_ZeroBadges
+  goto_if_eq VAR_BADGE_COUNT, 1, PalletTown_EventScript_Aliza_OneBadge
+  goto_if_eq VAR_BADGE_COUNT, 2, PalletTown_EventScript_Aliza_TwoBadges
+  goto_if_eq VAR_BADGE_COUNT, 3, PalletTown_EventScript_Aliza_ThreeBadges
+  goto_if_eq VAR_BADGE_COUNT, 4, PalletTown_EventScript_Aliza_FourBadges
+  goto_if_eq VAR_BADGE_COUNT, 5, PalletTown_EventScript_Aliza_FiveBadges
+  goto_if_eq VAR_BADGE_COUNT, 6, PalletTown_EventScript_Aliza_SixBadges
+  goto_if_eq VAR_BADGE_COUNT, 7, PalletTown_EventScript_Aliza_SevenBadges
+  goto_if_eq VAR_BADGE_COUNT, 8, PalletTown_EventScript_Aliza_EightBadges
+  return
+
+PalletTown_EventScript_Aliza_AlreadyWon::
+	msgbox PalletTown_Text_Aliza_AlreadyWon
+	release
+	end
+
+PalletTown_EventScript_Aliza_WonAll::
+	msgbox PalletTown_Text_Aliza_WonAll
+	release
+	end
+
+PalletTown_EventScript_Aliza_BattleDeclined::
+	msgbox PalletTown_Text_Aliza_BattleDeclined
+	release
+	end
+
+PalletTown_EventScript_Aliza_ZeroBadges::
+	goto_if_set FLAG_ALIZA_WON_BATTLE_ZERO, PalletTown_EventScript_Aliza_AlreadyWon
+  msgbox PalletTown_Text_Aliza_BattleZeroAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PalletTown_EventScript_Aliza_BattleDeclined
+	trainerbattle_no_intro TRAINER_POKEFAN_ALIZA_ZERO_BADGES, PalletTown_Text_Aliza_BattleZeroWon
+	setflag FLAG_ALIZA_WON_BATTLE_ZERO
+	return
+
+PalletTown_EventScript_Aliza_OneBadge::
+	goto_if_set FLAG_ALIZA_WON_BATTLE_ONE, PalletTown_EventScript_Aliza_AlreadyWon
+  msgbox PalletTown_Text_Aliza_BattleOneAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PalletTown_EventScript_Aliza_BattleDeclined
+	trainerbattle_no_intro TRAINER_POKEFAN_ALIZA_ONE_BADGE, PalletTown_Text_Aliza_BattleOneWon
+	setflag FLAG_ALIZA_WON_BATTLE_ONE
+	return
+
+PalletTown_EventScript_Aliza_TwoBadges::
+	goto_if_set FLAG_ALIZA_WON_BATTLE_TWO, PalletTown_EventScript_Aliza_AlreadyWon
+  msgbox PalletTown_Text_Aliza_BattleTwoAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PalletTown_EventScript_Aliza_BattleDeclined
+	trainerbattle_no_intro TRAINER_POKEFAN_ALIZA_TWO_BADGES, PalletTown_Text_Aliza_BattleTwoWon
+	setflag FLAG_ALIZA_WON_BATTLE_TWO
+	return
+
+PalletTown_EventScript_Aliza_ThreeBadges::
+	goto_if_set FLAG_ALIZA_WON_BATTLE_THREE, PalletTown_EventScript_Aliza_AlreadyWon
+  msgbox PalletTown_Text_Aliza_BattleThreeAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PalletTown_EventScript_Aliza_BattleDeclined
+	trainerbattle_no_intro TRAINER_POKEFAN_ALIZA_THREE_BADGES, PalletTown_Text_Aliza_BattleThreeWon
+	setflag FLAG_ALIZA_WON_BATTLE_THREE
+	return
+
+PalletTown_EventScript_Aliza_FourBadges::
+	goto_if_set FLAG_ALIZA_WON_BATTLE_FOUR, PalletTown_EventScript_Aliza_AlreadyWon
+  msgbox PalletTown_Text_Aliza_BattleFourAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PalletTown_EventScript_Aliza_BattleDeclined
+	trainerbattle_no_intro TRAINER_POKEFAN_ALIZA_FOUR_BADGES, PalletTown_Text_Aliza_BattleFourWon
+	setflag FLAG_ALIZA_WON_BATTLE_FOUR
+	return
+
+PalletTown_EventScript_Aliza_FiveBadges::
+	goto_if_set FLAG_ALIZA_WON_BATTLE_FIVE, PalletTown_EventScript_Aliza_AlreadyWon
+  msgbox PalletTown_Text_Aliza_BattleFiveAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PalletTown_EventScript_Aliza_BattleDeclined
+	trainerbattle_no_intro TRAINER_POKEFAN_ALIZA_FIVE_BADGES, PalletTown_Text_Aliza_BattleFiveWon
+	setflag FLAG_ALIZA_WON_BATTLE_FIVE
+	return
+
+PalletTown_EventScript_Aliza_SixBadges::
+	goto_if_set FLAG_ALIZA_WON_BATTLE_SIX, PalletTown_EventScript_Aliza_AlreadyWon
+  msgbox PalletTown_Text_Aliza_BattleSixAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PalletTown_EventScript_Aliza_BattleDeclined
+	trainerbattle_no_intro TRAINER_POKEFAN_ALIZA_SIX_BADGES, PalletTown_Text_Aliza_BattleSixWon
+	setflag FLAG_ALIZA_WON_BATTLE_SIX
+	return
+
+PalletTown_EventScript_Aliza_SevenBadges::
+	goto_if_set FLAG_ALIZA_WON_BATTLE_SEVEN, PalletTown_EventScript_Aliza_AlreadyWon
+  msgbox PalletTown_Text_Aliza_BattleSevenAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PalletTown_EventScript_Aliza_BattleDeclined
+	trainerbattle_no_intro TRAINER_POKEFAN_ALIZA_SEVEN_BADGES, PalletTown_Text_Aliza_BattleSevenWon
+	setflag FLAG_ALIZA_WON_BATTLE_SEVEN
+	return
+
+PalletTown_EventScript_Aliza_EightBadges::
+	goto_if_set FLAG_ALIZA_WON_BATTLE_EIGHT, PalletTown_EventScript_Aliza_WonAll
+  msgbox PalletTown_Text_Aliza_BattleEightAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PalletTown_EventScript_Aliza_BattleDeclined
+	trainerbattle_no_intro TRAINER_POKEFAN_ALIZA_EIGHT_BADGES, PalletTown_Text_Aliza_BattleEightWon
+	setflag FLAG_ALIZA_WON_BATTLE_EIGHT
+	return
+
 PalletTown_EventScript_OaksLabSign::
 	lockall
 	famechecker FAMECHECKER_OAK, 0
