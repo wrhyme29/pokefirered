@@ -29,6 +29,7 @@
 #include "roamer.h"
 #include "safari_zone.h"
 #include "scanline_effect.h"
+#include "script_pokemon_util.h"
 #include "task.h"
 #include "trig.h"
 #include "vs_seeker.h"
@@ -3788,6 +3789,8 @@ static void HandleEndTurn_BattleWon(void)
         gBattlescriptCurrInstr = BattleScript_PayDayMoneyAndPickUpItems;
     }
     gBattleMainFunc = HandleEndTurn_FinishBattle;
+
+    HealPlayerParty();
 }
 
 static void HandleEndTurn_BattleLost(void)
