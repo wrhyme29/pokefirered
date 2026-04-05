@@ -3867,6 +3867,50 @@ static const struct TrainerMonNoItemCustomMoves sParty_RivalCeruleanCharmander[]
     },
 };
 
+static const struct TrainerMonItemCustomMovesCustomAbilities sParty_RivalSteven0BadgesSquirtle[] = {
+    {
+        .iv = 25,
+        .lvl = 7,
+        .species = SPECIES_SQUIRTLE,
+        .heldItem = ITEM_ORAN_BERRY,
+        .abilityNum = 1,
+        .nickname = _("CRUSH"),
+        // 2 egg moves + one STAB move
+        // we also give it its hidden ability
+        // which is rain dish + rain dance as a learned move inherited
+        .moves = {MOVE_YAWN, MOVE_RAIN_DANCE, MOVE_MIRROR_COAT, MOVE_BUBBLE},
+    },
+};
+
+static const struct TrainerMonItemCustomMovesCustomAbilities sParty_RivalSteven0BadgesCharmander[] = {
+    {
+        .iv = 25,
+        .lvl = 7,
+        .species = SPECIES_CHARMANDER,
+        .heldItem = ITEM_ORAN_BERRY,
+        .abilityNum = 1,
+        .nickname = _("CHARO"),
+        // 2 egg moves + one STAB move
+        // we also give it its hidden ability
+        // which is solar power + sunny day as a TM move      
+        .moves = {MOVE_ANCIENT_POWER, MOVE_DRAGON_DANCE, MOVE_SUNNY_DAY, MOVE_EMBER },
+    },
+};
+
+static const struct TrainerMonItemCustomMovesCustomAbilities sParty_RivalSteven0BadgesBulbasaur[] = {
+    {
+        .iv = 25,
+        .lvl = 7,
+        .species = SPECIES_BULBASAUR,
+        .heldItem = ITEM_ORAN_BERRY,
+        .abilityNum = 1,
+        .nickname = _("SAURON"),
+        // 3 egg moves + one STAB move
+        // we give it a hidden ability of chlorophyll
+        .moves = {MOVE_MAGICAL_LEAF, MOVE_GRASS_WHISTLE, MOVE_LIGHT_SCREEN, MOVE_LEECH_SEED },
+    },
+};
+
 static const struct TrainerMonNoItemDefaultMoves sParty_ScientistTed[] = {
     {
         .iv = 0,

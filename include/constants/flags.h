@@ -1247,9 +1247,11 @@
 #define FLAG_DEFEATED_LANCE           0x4BB
 #define FLAG_DEFEATED_CHAMP           0x4BC
 
+// Steven clear flags
+#define FLAG_DEFEATED_RIVAL_STEVEN_0    0x4BD
+#define FLAG_GOT_ORAN_BERRY_FROM_STEVEN 0x4BE
+
 // Unused?
-#define FLAG_0x4BD               0x4BD
-#define FLAG_0x4BE               0x4BE
 #define FLAG_0x4BF               0x4BF
 #define FLAG_0x4C0               0x4C0
 #define FLAG_0x4C1               0x4C1

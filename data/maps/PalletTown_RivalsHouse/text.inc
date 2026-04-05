@@ -124,3 +124,45 @@ PalletTown_RivalsHouse_Text_LovelyAndSweetClefairy::
     .string "“The lovely and sweet\n"
     .string "CLEFAIRY”$"
 
+PalletTown_RivalsHouse_Steven_Text_ThankYou::
+    .string "STEVEN: No worries! Thanks for\n"
+    .string "stopping by! Come again!$"
+
+PalletTown_RivalsHouse_Steven_Text_NoPokemon::
+    .string "STEVEN: ...{PLAYER}?\n"
+    .string "I thought that was you!\p"
+    .string "I'm STEVEN! Think of me as your\n"
+    .string "special rival!\p"
+    .string "Come back with some POKéMON - \n"
+    .string "I'll be happy to battle you!$"
+
+PalletTown_RivalsHouse_Steven_Text_Battle::
+    .string "STEVEN: Okay! Let's battle!$"
+
+PalletTown_RivalsHouse_Steven_Text_WannaBattle::
+    .string "STEVEN: Want to see how your\n"
+    .string "POKéMON hold up in a battle?$"
+
+PalletTown_RivalsHouse_Steven_Text_NextBattle::
+    .string "STEVEN: Come back after you have\n"
+    .string "a gym badge for another challenge!$"
+
+PalletTown_RivalsHouse_Steven_Text_Battle_Defeat::
+    .string "STEVEN: Not bad!$"
+
+PalletTown_RivalsHouse_Steven_Text_TakeThis::
+    .string "Please take this with you.$"
+
+PalletTown_RivalsHouse_Steven_Text_ReceivedOranBerryFromSteven::
+    .string "{PLAYER} received an ORAN BERRY\n"
+    .string "from STEVEN.$"
+
+PalletTown_RivalsHouse_Steven_Text_ExplainOranBerry::
+    .string "An ORAN BERRY can be held by\n"
+    .string "a POKéMON.\p"
+    .string "When the holder's HP reaches half,\n"
+    .string "your POKéMON will heal by 10HP!\p"
+    .string "Pretty nifty, right?$"
+
+PalletTown_RivalsHouse_Steven_Text_ShouldMakeRoomForThis::
+    .string "You should make room for this.$"
