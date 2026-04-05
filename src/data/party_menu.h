@@ -1161,6 +1161,17 @@ static const u16 sFieldMoves[] =
     MOVE_DIG, MOVE_MILK_DRINK, MOVE_SOFT_BOILED, MOVE_SWEET_SCENT, FIELD_MOVE_END // this may be misuse of enum. same in emerald
 };
 
+static const u8 sFieldMovesType[] =
+{
+    [MOVE_FLASH]        = TYPE_ELECTRIC,
+    [MOVE_CUT]          = TYPE_NORMAL,
+    [MOVE_FLY]          = TYPE_FLYING,
+    [MOVE_STRENGTH]     = TYPE_FIGHTING,
+    [MOVE_SURF]         = TYPE_WATER,
+    [MOVE_ROCK_SMASH]   = TYPE_ROCK,
+    [MOVE_WATERFALL]    = TYPE_ICE,
+};
+
 static struct
 {
     bool8 (*fieldMoveFunc)(void);

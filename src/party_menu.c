@@ -2962,22 +2962,30 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
 
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
-    u8 i, j;
+    u8 i;
 
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_SUMMARY);
-    // Add field moves to action list
-    for (i = 0; i < MAX_MON_MOVES; ++i)
+
+    // Add field moves to action list if HM and matching type move exists
+    for (i = FIELD_MOVE_FLASH; i < FIELD_MOVE_TELEPORT; ++i)
     {
-        for (j = 0; sFieldMoves[j] != FIELD_MOVE_END; ++j)
+        if(MonKnowsMoveOfType(&mons[slotId], sFieldMovesType[sFieldMoves[i]]))
         {
-            if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == sFieldMoves[j])
-            {
-                AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + CURSOR_OPTION_FIELD_MOVES);
-                break;
-            }
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, i + CURSOR_OPTION_FIELD_MOVES);
         }
     }
+
+    // Add field moves to action list that are specific
+    for (i = FIELD_MOVE_TELEPORT; i < FIELD_MOVE_END; ++i)
+    {
+        if(MonKnowsMove(&mons[slotId], sFieldMoves[i]))
+        {
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, i + CURSOR_OPTION_FIELD_MOVES);
+            break;
+        }
+    }
+    
     if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_SWITCH);
     if (ItemIsMail(GetMonData(&mons[slotId], MON_DATA_HELD_ITEM)))
@@ -4738,6 +4746,21 @@ bool8 MonKnowsMove(struct Pokemon *mon, u16 move)
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
         if (GetMonData(mon, MON_DATA_MOVE1 + i) == move)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool8 MonKnowsMoveOfType(struct Pokemon *mon, u8 type)
+{
+    u8 i;
+
+    for (i = 0; i < MAX_MON_MOVES; ++i)
+    {   
+        u16 move = GetMonData(mon, MON_DATA_MOVE1 + i);
+        if(move == MOVE_NONE)
+            return FALSE;
+        if (gBattleMoves[move].type == type)
             return TRUE;
     }
     return FALSE;
