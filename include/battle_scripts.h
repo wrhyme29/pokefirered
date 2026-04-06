@@ -131,6 +131,7 @@ extern const u8 BattleScript_MoveEffectUproar[];
 extern const u8 BattleScript_MoveEffectToxic[];
 extern const u8 BattleScript_MoveEffectPayDay[];
 extern const u8 BattleScript_MoveEffectWrap[];
+extern const u8 BattleScript_SolarPowerActivates[];
 extern const u8 BattleScript_MoveEffectConfusion[];
 extern const u8 BattleScript_MoveEffectRecoil33[];
 extern const u8 BattleScript_DoRecoil33[];
