@@ -200,6 +200,9 @@ const u32 gItemIconPalette_WaterStone[] = INCBIN_U32("graphics/items/icon_palett
 const u32 gItemIcon_LeafStone[] = INCBIN_U32("graphics/items/icons/leaf_stone.4bpp.lz");
 const u32 gItemIconPalette_LeafStone[] = INCBIN_U32("graphics/items/icon_palettes/leaf_stone.gbapal.lz");
 
+const u32 gItemIcon_LinkingCord[] = INCBIN_U32("graphics/items/icons/linking_cord.4bpp.lz");
+const u32 gItemIconPalette_LinkingCord[] = INCBIN_U32("graphics/items/icon_palettes/linking_cord.gbapal.lz");
+
 // Valuables
 
 const u32 gItemIcon_TinyMushroom[] = INCBIN_U32("graphics/items/icons/tiny_mushroom.4bpp.lz");
