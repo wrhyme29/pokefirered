@@ -3267,6 +3267,8 @@ extern const u32 gItemIcon_BerryPouch[];
 extern const u32 gItemIconPalette_BerryPouch[];
 extern const u32 gItemIcon_TeachyTV[];
 extern const u32 gItemIconPalette_TeachyTV[];
+extern const u32 gItemIcon_PortaPc[];
+extern const u32 gItemIconPalette_PortaPc[];
 extern const u32 gItemIcon_TriPass[];
 extern const u32 gItemIconPalette_TriPass[];
 extern const u32 gItemIcon_RainbowPass[];

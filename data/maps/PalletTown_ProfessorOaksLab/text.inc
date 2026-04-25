@@ -207,6 +207,24 @@ PalletTown_ProfessorOaksLab_Text_OakCompleteMonGuideWasMyDream::
     .string "This is a great undertaking in\n"
     .string "POKéMON history!$"
 
+PalletTown_ProfessorOaksLab_Text_OakOneLastThing::
+    .string "OAK: {PLAYER} and {RIVAL}!\n"
+    .string "One last thing before you go.\p"
+    .string "Shlepping back to the POKéMON\n"
+    .string "Center can get annoying!\p"
+    .string "Take this with you to make\n"
+    .string "it easier to try new POKéMON!$"
+
+PalletTown_ProfessorOaksLab_Text_ReceivePortaPcFromOak::
+    .string "{PLAYER} received the PORTA-PC\n"
+    .string "from PROF. OAK.$"
+
+PalletTown_ProfessorOaksLab_Text_OakExplainPortaPc::
+    .string "The PORTA-PC works as a portable\n"
+    .string "PC, letting you switch things up!\p"
+    .string "You can access your boxes and\n"
+    .string "change your current party on the go.$"
+
 PalletTown_ProfessorOaksLab_Text_OakMonsAroundWorldWait::
     .string "POKéMON around the world wait for\n"
     .string "you, {PLAYER}!$"

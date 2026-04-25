@@ -9,6 +9,7 @@
 #include "field_effect.h"
 #include "field_fadetransition.h"
 #include "event_object_movement.h"
+#include "event_scripts.h"
 #include "field_player_avatar.h"
 #include "field_specials.h"
 #include "field_weather.h"
@@ -57,6 +58,9 @@ static void Task_InitTMCaseFromField(u8 taskId);
 static void InitBerryPouchFromBag(void);
 static void Task_InitBerryPouchFromField(u8 taskId);
 static void InitBerryPouchFromBattle(void);
+static void InitPortaPcFromBag(void);
+void InitPortaPc(MainCallback exitCallback);
+static void Task_InitPortaPc(u8 taskId);
 static void InitTeachyTvFromBag(void);
 static void Task_InitTeachyTvFromField(u8 taskId);
 static void Task_UseRepel(u8 taskId);
@@ -513,6 +517,38 @@ void BattleUseFunc_BerryPouch(u8 taskId)
 static void InitBerryPouchFromBattle(void)
 {
     InitBerryPouch(BERRYPOUCH_FROMBATTLE, CB2_BagMenuFromBattle, 0);
+}
+
+void FieldUseFunc_PortaPc(u8 taskId)
+{
+    if (gTasks[taskId].data[3] == 0)
+    {
+        ItemMenu_SetExitCallback(InitPortaPcFromBag);
+        ItemMenu_StartFadeToExitCallback(taskId);
+    }
+    else
+    {
+        StopPokemonLeagueLightingEffectTask();
+        FadeScreen(FADE_TO_BLACK, 0);
+        gTasks[taskId].func = Task_InitPortaPc;
+    }
+}
+
+void InitPortaPc(MainCallback exitCallback)
+{
+    ScriptContext_SetupScript(EventScript_PC_NoAnimation);
+    SetMainCallback2(exitCallback);
+}
+
+static void Task_InitPortaPc(u8 taskId)
+{
+    InitPortaPc(CB2_ReturnToField);
+    DestroyTask(taskId);
+}
+
+static void InitPortaPcFromBag(void)
+{
+    InitPortaPc(CB2_BagMenuFromStartMenu);
 }
 
 void FieldUseFunc_TeachyTv(u8 taskId)
