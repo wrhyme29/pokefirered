@@ -486,8 +486,9 @@ extern struct BattleStruct *gBattleStruct;
         typeArg = gBattleMoves[move].type;                            \
 }
 
-#define IS_TYPE_PHYSICAL(moveType)(moveType < TYPE_MYSTERY)
-#define IS_TYPE_SPECIAL(moveType)(moveType > TYPE_MYSTERY)
+#define IS_MOVE_PHYSICAL(moveCategory)(moveCategory == CATEGORY_PHYSICAL)
+#define IS_MOVE_SPECIAL(moveCategory)(moveCategory == CATEGORY_SPECIAL)
+#define IS_MOVE_STATUS(moveCategory)(moveCategory == CATEGORY_STATUS)
 
 #define TARGET_TURN_DAMAGED ((gSpecialStatuses[gBattlerTarget].physicalDmg != 0 || gSpecialStatuses[gBattlerTarget].specialDmg != 0))
 
@@ -545,6 +546,7 @@ struct BattleSpriteInfo
             u16 flag_x8 : 1; // 0x8
             u16 hpNumbersNoBars : 1; // 0x10
     /*0x2*/ u16 transformSpecies;
+            u8  selectedMoveCategorySpriteId;
 };
 
 struct BattleAnimationInfo

@@ -16,6 +16,7 @@
 #include "constants/battle_anim.h"
 #include "constants/moves.h"
 #include "constants/songs.h"
+#include "move_categories.h"
 
 static bool8 ShouldAnimBeDoneRegardlessOfSubsitute(u8 animId);
 static void Task_ClearBitWhenBattleTableAnimDone(u8 taskId);
@@ -417,6 +418,9 @@ void BattleLoadPlayerMonSpriteGfx(struct Pokemon *mon, u8 battlerId)
         BlendPalette(paletteOffset, 16, 6, RGB_WHITE);
         CpuCopy32(&gPlttBufferFaded[paletteOffset], &gPlttBufferUnfaded[paletteOffset], PLTT_SIZE_4BPP);
     }
+
+    LoadSpriteSheet(&gMoveCategorySpriteSheet);
+    LoadSpritePalette(&gMoveCategorySpritePalette);
 }
 
 void DecompressGhostFrontPic(struct Pokemon *unused, u8 battlerId)

@@ -114,6 +114,13 @@
 #define TYPE_DARK           17
 #define NUMBER_OF_MON_TYPES 18
 
+// Pokemon move categories
+# define CATEGORY_NONE         0
+# define CATEGORY_PHYSICAL     1
+# define CATEGORY_SPECIAL      2
+# define CATEGORY_STATUS       3
+
+
 // Pokemon egg groups
 #define EGG_GROUP_NONE         0
 #define EGG_GROUP_MONSTER      1

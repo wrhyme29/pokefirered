@@ -34,6 +34,7 @@
 #include "mon_markings.h"
 #include "pokemon_storage_system.h"
 #include "constants/sound.h"
+#include "move_categories.h"
 
 // needs conflicting header to match (curIndex is s8 in the function, but has to be defined as u8 here)
 extern s16 SeekToNextMonInBox(struct BoxPokemon * boxMons, u8 curIndex, u8 maxIndex, u8 flags);
@@ -104,6 +105,9 @@ static void CreateExpBarObjs(u16, u16);
 static void CreateBallIconObj(void);
 static void PokeSum_CreateMonIconSprite(void);
 static void PokeSum_CreateMonPicSprite(void);
+static void PokeSum_ChangeMoveCategoryIconSprite(void);
+static void PokeSum_DestroyMoveCategoryIconSprite(void);
+static void PokeSum_ShowOrHideMoveCategoryIconSprite(u8 invisible);
 static void Task_InputHandler_SelectOrForgetMove(u8 taskId);
 static void CB2_RunPokemonSummaryScreen(void);
 static void PrintInfoPage(void);
@@ -242,6 +246,8 @@ struct PokemonSummaryScreenData
 
     u8 ALIGNED(4) lastPageFlipDirection; /* 0x3300 */
     u8 ALIGNED(4) unk3304; /* 0x3304 */
+    u16 moveCategories[5]; /* 0x335E */
+    u8 ALIGNED(4) moveCategorySpriteId; /* 0x3362 */
 };
 
 struct Struct203B144
@@ -2270,6 +2276,8 @@ static void BufferMonMoveI(u8 i)
 
     sMonSummaryScreen->numMoves++;
     sMonSummaryScreen->moveTypes[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].type;
+    sMonSummaryScreen->moveCategories[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].category;
+    sMonSummaryScreen->moveCategorySpriteId = 0xFF;
     StringCopy(sMonSummaryScreen->summary.moveNameStrBufs[i], gMoveNames[sMonSummaryScreen->moveIds[i]]);
 
     if (i >= 4 && sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE)
@@ -2333,6 +2341,9 @@ static u8 PokeSum_HandleCreateSprites(void)
     case 8:
         PokeSum_CreateMonIconSprite();
         break;
+    case 9:
+        LoadSpriteSheet(&gMoveCategorySpriteSheet);
+        LoadSpritePalette(&gMoveCategorySpritePalette);
     default:
         PokeSum_CreateMonPicSprite();
         return TRUE;
@@ -2854,27 +2865,26 @@ static void PokeSum_PrintExpPoints_NextLv(void)
 
 static void PokeSum_PrintSelectedMoveStats(void)
 {
-    if (sMoveSelectionCursorPos < 5)
-    {
-        if (sMonSummaryScreen->mode != PSS_MODE_SELECT_MOVE && sMoveSelectionCursorPos == 4)
-            return;
+    if (sMoveSelectionCursorPos >= 5) return;
+    if (sMonSummaryScreen->mode != PSS_MODE_SELECT_MOVE && sMoveSelectionCursorPos == 4) return;
+    
+    PokeSum_ChangeMoveCategoryIconSprite();
 
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                     57, 1,
-                                     sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                     sMonSummaryScreen->summary.movePowerStrBufs[sMoveSelectionCursorPos]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
+                                    57, 1,
+                                    sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+                                    sMonSummaryScreen->summary.movePowerStrBufs[sMoveSelectionCursorPos]);
 
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                     57, 15,
-                                     sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                     sMonSummaryScreen->summary.moveAccuracyStrBufs[sMoveSelectionCursorPos]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
+                                    57, 15,
+                                    sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+                                    sMonSummaryScreen->summary.moveAccuracyStrBufs[sMoveSelectionCursorPos]);
 
-        AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                     7, 42,
-                                     0, 0,
-                                     sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                     gMoveDescriptionPointers[sMonSummaryScreen->moveIds[sMoveSelectionCursorPos] - 1]);
-    }
+    AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
+                                    7, 42,
+                                    0, 0,
+                                    sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+                                    gMoveDescriptionPointers[sMonSummaryScreen->moveIds[sMoveSelectionCursorPos] - 1]);
 }
 
 static void PokeSum_PrintAbilityDataOrMoveTypes(void)
@@ -3642,7 +3652,7 @@ static void Task_HandleInput_SelectMove(u8 taskId)
                 sMoveSelectionCursorPos = 0;
                 sMoveSwapCursorPos = 0;
             }
-
+            PokeSum_DestroyMoveCategoryIconSprite();
             ShoworHideMoveSelectionCursor(TRUE);
             sMonSummaryScreen->pageFlipDirection = 0;
             PokeSum_RemoveWindows(sMonSummaryScreen->curPageIndex);
@@ -4180,6 +4190,32 @@ static void PokeSum_DestroyMonIconSprite(void)
     species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG);
     SafeFreeMonIconPalette(species);
     DestroyMonIcon(&gSprites[sMonSummaryScreen->monIconSpriteId]);
+}
+
+static void PokeSum_ShowOrHideMoveCategoryIconSprite(u8 invisible)
+{
+    if(sMonSummaryScreen->moveCategorySpriteId == 0xFF) return;
+    gSprites[sMonSummaryScreen->moveCategorySpriteId].invisible = invisible;
+}
+
+static void PokeSum_DestroyMoveCategoryIconSprite(void)
+{
+    if(sMonSummaryScreen->moveCategorySpriteId == 0xFF) return;
+    DestroySprite(&gSprites[sMonSummaryScreen->moveCategorySpriteId]);
+    sMonSummaryScreen->moveCategorySpriteId = 0xFF;
+}
+
+static void PokeSum_ChangeMoveCategoryIconSprite(void)
+{
+    PokeSum_ShowOrHideMoveCategoryIconSprite(TRUE);
+    if(sMonSummaryScreen->moveCategorySpriteId == 0xFF)
+    {
+        sMonSummaryScreen->moveCategorySpriteId = CreateMoveCategorySprite(sMonSummaryScreen->moveCategories[sMoveSelectionCursorPos], 100, 63);
+    } else
+    {
+        ChangeMoveCategorySprite(sMonSummaryScreen->moveCategories[sMoveSelectionCursorPos], sMonSummaryScreen->moveCategorySpriteId);
+    }
+    PokeSum_ShowOrHideMoveCategoryIconSprite(FALSE);
 }
 
 static void CreateMoveSelectionCursorObjs(u16 tileTag, u16 palTag)
@@ -4852,6 +4888,7 @@ static void PokeSum_DestroySprites(void)
     DestroyExpBarObjs();
     PokeSum_DestroyMonPicSprite();
     PokeSum_DestroyMonIconSprite();
+    PokeSum_DestroyMoveCategoryIconSprite();
     DestroyBallIconObj();
     PokeSum_DestroyMonMarkingsSprite();
     DestroyMonStatusIconObj();

@@ -215,6 +215,7 @@ void BattleHandleAddTextPrinter(const u8 *text, u8 arg1);
 void SetPpNumbersPaletteInMoveSelection(void);
 u8 GetCurrentPpToMaxPpState(u8 currentPp, u8 maxPp);
 void BattlePutTextOnWindow(const u8 *text, u8 windowId_flags);
+void BattlePutSpriteOnWindow(const u8 spriteId, u8 windowId_flags, s16 x, s16 y);
 bool8 BattleStringShouldBeColored(u16);
 
 extern struct BattleMsgData *gBattleMsgDataPtr;

@@ -23,6 +23,7 @@
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/sound.h"
+#include "move_categories.h"
 
 static void PlayerHandleGetMonData(void);
 static void PlayerHandleSetMonData(void);
@@ -84,9 +85,11 @@ static void PlayerCmdEnd(void);
 static void PlayerBufferRunCommand(void);
 static void HandleInputChooseTarget(void);
 static void MoveSelectionDisplayPpNumber(void);
-static void MoveSelectionDisplayPpString(void);
+static void MoveSelectionDisplayMoveCategory(void);
 static void MoveSelectionDisplayMoveType(void);
 static void MoveSelectionDisplayMoveNames(void);
+static void MoveSelectionDisplayUpdate(void);
+static void CleanupMoveCategorySprite(void);
 static void HandleMoveSwitching(void);
 static void WaitForMonSelection(void);
 static void CompleteWhenChoseItem(void);
@@ -499,6 +502,7 @@ void HandleInputChooseMove(void)
                 gMultiUsePlayerCursor = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
             gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCB_ShowAsMoveTarget;
         }
+        CleanupMoveCategorySprite();
     }
     else if (JOY_NEW(B_BUTTON))
     {
@@ -507,6 +511,7 @@ void HandleInputChooseMove(void)
         PlayerBufferExecCompleted();
         ResetPaletteFadeControl();
         BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
+        CleanupMoveCategorySprite();
     }
     else if (JOY_NEW(DPAD_LEFT))
     {
@@ -516,8 +521,7 @@ void HandleInputChooseMove(void)
             gMoveSelectionCursor[gActiveBattler] ^= 1;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
-            MoveSelectionDisplayMoveType();
+            MoveSelectionDisplayUpdate();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
     }
@@ -530,8 +534,7 @@ void HandleInputChooseMove(void)
             gMoveSelectionCursor[gActiveBattler] ^= 1;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
-            MoveSelectionDisplayMoveType();
+            MoveSelectionDisplayUpdate();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
     }
@@ -543,8 +546,7 @@ void HandleInputChooseMove(void)
             gMoveSelectionCursor[gActiveBattler] ^= 2;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
-            MoveSelectionDisplayMoveType();
+            MoveSelectionDisplayUpdate();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
     }
@@ -557,8 +559,7 @@ void HandleInputChooseMove(void)
             gMoveSelectionCursor[gActiveBattler] ^= 2;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
-            MoveSelectionDisplayMoveType();
+            MoveSelectionDisplayUpdate();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
     }
@@ -711,9 +712,7 @@ static void HandleMoveSwitching(void)
             gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         gMoveSelectionCursor[gActiveBattler] = gMultiUsePlayerCursor;
         MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-        MoveSelectionDisplayPpString();
-        MoveSelectionDisplayPpNumber();
-        MoveSelectionDisplayMoveType();
+        MoveSelectionDisplayUpdate();
     }
     if (JOY_NEW(B_BUTTON))
     {
@@ -724,9 +723,6 @@ static void HandleMoveSwitching(void)
             gBattlerControllerFuncs[gActiveBattler] = OakOldManHandleInputChooseMove;
         else
             gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
-        MoveSelectionDisplayPpString();
-        MoveSelectionDisplayPpNumber();
-        MoveSelectionDisplayMoveType();
     }
     if (JOY_NEW(DPAD_LEFT))
     {
@@ -1384,10 +1380,39 @@ static void MoveSelectionDisplayMoveNames(void)
     }
 }
 
-static void MoveSelectionDisplayPpString(void)
+static void CleanupMoveCategorySprite(void)
 {
-    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);
-    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP);
+    if(gBattleSpritesDataPtr->battlerData->selectedMoveCategorySpriteId != 0xFF)
+    {
+        DestroySprite(&gSprites[gBattleSpritesDataPtr->battlerData->selectedMoveCategorySpriteId]);
+    }
+    gBattleSpritesDataPtr->battlerData->selectedMoveCategorySpriteId = 0xFF;
+}
+
+static void MoveSelectionDisplayUpdate(void)
+{
+    MoveSelectionDisplayMoveCategory();
+    MoveSelectionDisplayPpNumber();
+    MoveSelectionDisplayMoveType();
+}
+
+static void MoveSelectionDisplayMoveCategory(void)
+{
+    struct ChooseMoveStruct *moveInfo;
+    u8 categoryId;
+
+    moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
+    categoryId = gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].category;
+
+    if(gBattleSpritesDataPtr->battlerData->selectedMoveCategorySpriteId == 0xFF)
+    {
+         gBattleSpritesDataPtr->battlerData->selectedMoveCategorySpriteId = CreateMoveCategorySprite(categoryId, 0, 0);
+    } else
+    {
+        ChangeMoveCategorySprite(categoryId, gBattleSpritesDataPtr->battlerData->selectedMoveCategorySpriteId);
+    }
+
+    BattlePutSpriteOnWindow(gBattleSpritesDataPtr->battlerData->selectedMoveCategorySpriteId, B_WIN_PP, 120, 106);
 }
 
 static void MoveSelectionDisplayPpNumber(void)
@@ -1399,10 +1424,14 @@ static void MoveSelectionDisplayPpNumber(void)
         return;
     SetPpNumbersPaletteInMoveSelection();
     moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
-    txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
+    txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);
+    *txtPtr++ = EXT_CTRL_CODE_BEGIN;
+    *txtPtr++ = 6;
+    *txtPtr++ = 1;
+    txtPtr = ConvertIntToDecimalStringN(txtPtr, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
     *txtPtr = CHAR_SLASH;
     ConvertIntToDecimalStringN(++txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
-    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP_REMAINING);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP);
 }
 
 static void MoveSelectionDisplayMoveType(void)
@@ -2267,6 +2296,8 @@ static void PlayerHandleFaintAnimation(void)
             gBattlerControllerFuncs[gActiveBattler] = FreeMonSpriteAfterFaintAnim;
         }
     }
+
+    CleanupMoveCategorySprite();
 }
 
 static void PlayerHandlePaletteFade(void)
@@ -2447,10 +2478,9 @@ void InitMoveSelectionsVarsAndStrings(void)
 {
     MoveSelectionDisplayMoveNames();
     gMultiUsePlayerCursor = 0xFF;
+    gBattleSpritesDataPtr->battlerData->selectedMoveCategorySpriteId = 0xFF;
     MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-    MoveSelectionDisplayPpString();
-    MoveSelectionDisplayPpNumber();
-    MoveSelectionDisplayMoveType();
+    MoveSelectionDisplayUpdate();
 }
 
 static void PlayerHandleChooseItem(void)
@@ -2478,6 +2508,8 @@ static void PlayerHandleChoosePokemon(void)
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
     gBattlerControllerFuncs[gActiveBattler] = OpenPartyMenuToChooseMon;
     gBattlerInMenuId = gActiveBattler;
+    
+    CleanupMoveCategorySprite();
 }
 
 static void PlayerHandleCmd23(void)
