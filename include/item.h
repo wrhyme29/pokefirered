@@ -39,6 +39,7 @@ enum {
 };
 
 extern const struct Item gItems[];
+extern u16 gPriceOverrides[];
 extern struct BagPocket gBagPockets[];
 
 void GetBerryCountString(u8 *dst, const u8 *berryName, u32 quantity);
@@ -90,5 +91,9 @@ void SortAndCompactBagPocket(struct BagPocket * pocket);
 u8 CountItemsInPC(void);
 void ApplyNewEncryptionKeyToBagItems_(u32 newKey);
 bool8 HasAtLeastOneBerry(void);
+
+bool8 AddPriceOverride(u16 itemId, u16 newPrice);
+void ClearPriceOverrides(void);
+u16 GetPriceOverride(u16 itemId);
 
 #endif // GUARD_ITEM_H

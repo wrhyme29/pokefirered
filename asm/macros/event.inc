@@ -570,6 +570,18 @@
 	.2byte \quantity
 	.endm
 
+	@ Adds a price override for the specified item
+	.macro addpriceoverride itemId:req, price:req
+	.byte 0xd6
+	.2byte \itemId
+	.2byte \price
+	.endm
+
+	@ Clears the price overrides list.
+	.macro clearpriceoverrides
+	.byte 0xd7
+	.endm
+
 	@ In FRLG, this command is a nop. In RSE, adds a decoration to the player's PC.
 	.macro adddecoration decoration:req
 	.byte 0x4b
@@ -1111,22 +1123,29 @@
 
 	@ Opens the Pokemart system, offering the specified products for sale.
 	@ Products should be a list of .2byte item values preceded by an .align 2
-	.macro pokemart products:req
+	@ Service should be a byte item specifying buying/selling service. Defaults to both.
+	.macro pokemart products:req service=MART_SERVICE_BUY_SELL
 	.byte 0x86
 	.4byte \products
+	.byte \service
 	.endm
 
 	@ Opens the Pokemart system and treats the list of items as decorations.
 	@ Products should be a list of .2byte decoration values preceded by an .align 2
-	.macro pokemartdecoration products:req
+	@ Service should be a byte item specifying buying/selling service. Defaults to both.
+	.macro pokemartdecoration products:req service=MART_SERVICE_BUY_SELL
 	.byte 0x87
 	.4byte \products
+	.byte \service
 	.endm
 
 	@ Identical to pokemartdecoration, but with slight changes to the clerk dialogue. See uses of MART_TYPE_DECOR2.
-	.macro pokemartdecoration2 products:req
+	@ Products should be a list of .2byte decoration values preceded by an .align 2
+	@ Service should be a byte item specifying buying/selling service. Defaults to both.
+	.macro pokemartdecoration2 products:req service=MART_SERVICE_BUY_SELL
 	.byte 0x88
 	.4byte \products
+	.byte \service
 	.endm
 
 	@ Starts up the slot machine minigame. id is a SLOT_MACHINE_* value that influences probabilities of certain reel outcomes.

@@ -17,6 +17,7 @@
 #include "field_fadetransition.h"
 #include "scanline_effect.h"
 #include "item_menu_icons.h"
+#include "pokemon_icon.h"
 #include "decompress.h"
 #include "menu_indicators.h"
 #include "field_player_avatar.h"
@@ -33,6 +34,7 @@
 #define tItemCount data[1]
 #define tItemId data[5]
 #define tListTaskId data[7]
+#define MART_SERVICE_LINE_HEIGHT 2
 
 // mart types
 enum
@@ -67,6 +69,7 @@ struct ShopData
              u16 itemSlot:2;
              u16 unk16_11:5;
     /*0x18*/ u16 unk18;
+             u8  martService;
 };
 
 static EWRAM_DATA s16 sViewportObjectEvents[OBJECT_EVENTS_COUNT][4] = {0};
@@ -79,9 +82,10 @@ EWRAM_DATA u16 (*gShopTilemapBuffer4)[0x400] = {0};
 EWRAM_DATA struct ListMenuItem *sShopMenuListMenu = {0};
 static EWRAM_DATA u8 (*sShopMenuItemStrings)[13] = {0};
 EWRAM_DATA struct QuestLogEvent_Shop sHistory[2] = {0};
+static EWRAM_DATA u8 sPokemonIconSpriteIds[PARTY_SIZE] = {0};
 
 //Function Declarations
-static u8 CreateShopMenu(u8 martType);
+static u8 CreateShopMenu(u8 martType, u8 martService);
 static u8 GetMartTypeFromItemList(u32 a0);
 static void SetShopItemsForSale(const u16 *items);
 static void SetShopMenuCallback(MainCallback callback);
@@ -107,7 +111,11 @@ static bool8 BuyMenuBuildListMenuTemplate(void);
 static void PokeMartWriteNameAndIdAt(struct ListMenuItem *list, u16 index, u8 *dst);
 static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, struct ListMenu *list);
 static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y);
-static void LoadTmHmNameInMart(s32 item);
+static void LoadTmHmNameCompatabilityBoxInMart(s32 item);
+static void LoadTmHmNameCompabilityTextInMart(s32 item);
+static void LoadTmHmNameCompabilityCancelInMart(s32 item);
+static void CleanupTmHmNameCompabilityIconsInMart(void);
+static void LoadTmHmNameCompabilityIconsInMart(s32 item);
 static void BuyMenuPrintCursor(u8 listTaskId, u8 a1);
 static void BuyMenuPrintCursorAtYPosition(u8 y, u8 a1);
 static void BuyMenuFreeMemory(void);
@@ -136,10 +144,25 @@ static void Task_ExitBuyMenu(u8 taskId);
 static void DebugFunc_PrintPurchaseDetails(u8 taskId);
 static void DebugFunc_PrintShopMenuHistoryBeforeClearMaybe(void);
 static void RecordTransactionForQuestLog(void);
+static void ResetMonIconState(void);
 
-static const struct MenuAction sShopMenuActions_BuySellQuit[] =
+static const struct MenuAction *sShopServiceMenuActions;
+
+static const struct MenuAction sShopServiceMenuActions_BuyQuitOnly[] =
 {
-    {gText_ShopBuy, {.void_u8 = Task_HandleShopMenuBuy}},
+    {gText_ShopBuy,  {.void_u8 = Task_HandleShopMenuBuy}},
+    {gText_ShopQuit, {.void_u8 = Task_HandleShopMenuQuit}}
+};
+
+static const struct MenuAction sShopServiceMenuActions_BuySellQuit[] =
+{
+    {gText_ShopBuy,  {.void_u8 = Task_HandleShopMenuBuy}},
+    {gText_ShopSell, {.void_u8 = Task_HandleShopMenuSell}},
+    {gText_ShopQuit, {.void_u8 = Task_HandleShopMenuQuit}}
+};
+
+static const struct MenuAction sShopServiceMenuActions_SellQuitOnly[] =
+{
     {gText_ShopSell, {.void_u8 = Task_HandleShopMenuSell}},
     {gText_ShopQuit, {.void_u8 = Task_HandleShopMenuQuit}}
 };
@@ -202,9 +225,11 @@ static const struct BgTemplate sShopBuyMenuBgTemplates[4] =
 };
 
 // Functions
-static u8 CreateShopMenu(u8 martType)
+static u8 CreateShopMenu(u8 martType, u8 martService)
 {
+    u8 serviceMenuActionsCount;
     sShopData.martType = GetMartTypeFromItemList(martType);
+    sShopData.martService = martService;
     sShopData.selectedRow = 0;
     if (ContextNpcGetTextColor() == NPC_TEXT_COLOR_MALE)
         sShopData.fontId = FONT_MALE;
@@ -212,8 +237,25 @@ static u8 CreateShopMenu(u8 martType)
         sShopData.fontId = FONT_FEMALE;
 
     sShopMenuWindowId = AddWindow(&sShopMenuWindowTemplate);
+    switch(sShopData.martService)
+    {
+        case MART_SERVICE_BUY:
+            sShopServiceMenuActions = sShopServiceMenuActions_BuyQuitOnly;
+            serviceMenuActionsCount = 2;
+            break;
+        case MART_SERVICE_SELL:
+            sShopServiceMenuActions = sShopServiceMenuActions_SellQuitOnly;
+            serviceMenuActionsCount = 2;
+            break;
+        case MART_SERVICE_BUY_SELL:
+        default:
+            sShopServiceMenuActions = sShopServiceMenuActions_BuySellQuit;
+            serviceMenuActionsCount = 3;
+    }
+    SetWindowAttribute(sShopMenuWindowId, WINDOW_HEIGHT, MART_SERVICE_LINE_HEIGHT * serviceMenuActionsCount);
     SetStdWindowBorderStyle(sShopMenuWindowId, 0);
-    PrintTextArray(sShopMenuWindowId, FONT_NORMAL, GetMenuCursorDimensionByFont(FONT_NORMAL, 0), 2, 16, 3, sShopMenuActions_BuySellQuit);
+
+    PrintTextArray(sShopMenuWindowId, FONT_NORMAL, GetMenuCursorDimensionByFont(FONT_NORMAL, 0), MART_SERVICE_LINE_HEIGHT, 16, serviceMenuActionsCount, sShopServiceMenuActions);
     Menu_InitCursor(sShopMenuWindowId, FONT_NORMAL, 0, 2, 16, 3, 0);
     PutWindowTilemap(sShopMenuWindowId);
     CopyWindowToVram(sShopMenuWindowId, COPYWIN_MAP);
@@ -266,7 +308,7 @@ static void Task_ShopMenu(u8 taskId)
         Task_HandleShopMenuQuit(taskId);
         break;
     default:
-        sShopMenuActions_BuySellQuit[Menu_GetCursorPos()].func.void_u8(taskId);
+        sShopServiceMenuActions[Menu_GetCursorPos()].func.void_u8(taskId);
         break;
     }
 }
@@ -332,7 +374,7 @@ static void Task_ReturnToShopMenu(u8 taskId)
 
 static void ShowShopMenuAfterExitingBuyOrSellMenu(u8 taskId)
 {
-    CreateShopMenu(sShopData.martType);
+    CreateShopMenu(sShopData.martType, sShopData.martService);
     DestroyTask(taskId);
 }
 
@@ -369,6 +411,7 @@ static void CB2_InitBuyMenu(void)
         ResetTasks();
         ClearScheduledBgCopiesToVram();
         ResetItemMenuIconState();
+        ResetMonIconState();
         if (!(InitShopData()) || !(BuyMenuBuildListMenuTemplate()))
             return;
         BuyMenuInitBgs();
@@ -435,6 +478,12 @@ static bool8 InitShopData(void)
     }
 
     return TRUE;
+}
+
+void ResetMonIconState(void)
+{
+    u16 i;
+    for (i = 0; i < PARTY_SIZE; i++) sPokemonIconSpriteIds[i] = SPRITE_NONE;
 }
 
 static void BuyMenuInitBgs(void)
@@ -577,6 +626,7 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, s
         description = gText_QuitShopping;
 
     FillWindowPixelBuffer(5, PIXEL_FILL(0));
+    BuyMenuPrint(5, FONT_NORMAL, description, 0, 3, 2, 1, 0, 0);
     if (sShopData.martType != MART_TYPE_TMHM)
     {
         DestroyItemMenuIcon(sShopData.itemSlot ^ 1);
@@ -586,13 +636,11 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, s
             CreateItemMenuIcon(ITEMS_COUNT, sShopData.itemSlot);
 
         sShopData.itemSlot ^= 1;
-        BuyMenuPrint(5, FONT_NORMAL, description, 0, 3, 2, 1, 0, 0);
     }
-    else //TM Mart
+    if (sShopData.martType == MART_TYPE_TMHM) 
     {
-        FillWindowPixelBuffer(6, PIXEL_FILL(0));
-        LoadTmHmNameInMart(item);
-        BuyMenuPrint(5, FONT_NORMAL, description, 2, 3, 1, 0, 0, 0);
+        FillWindowPixelBuffer(6, PIXEL_FILL(1));
+        LoadTmHmNameCompatabilityBoxInMart(item);
     }
 }
 
@@ -613,21 +661,88 @@ static void BuyMenuPrintPriceInList(u8 windowId, u32 item, u8 y)
     }
 }
 
-static void LoadTmHmNameInMart(s32 item)
+static void LoadTmHmNameCompatabilityBoxInMart(s32 item)
 {
-    if (item != INDEX_CANCEL)
+    CleanupTmHmNameCompabilityIconsInMart();
+
+    if (item == INDEX_CANCEL)
     {
-        ConvertIntToDecimalStringN(gStringVar1, item - ITEM_DEVON_SCOPE, 2, 2);
-        StringCopy(gStringVar4, gText_NumberClear01);
-        StringAppend(gStringVar4, gStringVar1);
-        BuyMenuPrint(6, FONT_SMALL, gStringVar4, 0, 0, 0, 0, TEXT_SKIP_DRAW, 1);
-        StringCopy(gStringVar4, gMoveNames[ItemIdToBattleMoveId(item)]);
-        BuyMenuPrint(6, FONT_NORMAL, gStringVar4, 0, 0x10, 0, 0, 0, 1);
+        LoadTmHmNameCompabilityCancelInMart(item);
+        return;
     }
-    else
+
+    LoadTmHmNameCompabilityTextInMart(item);
+    LoadTmHmNameCompabilityIconsInMart(item);
+}
+
+static void LoadTmHmNameCompabilityTextInMart(s32 item)
+{
+    u8 windowId = 6;
+    ConvertIntToDecimalStringN(gStringVar1, item - ITEM_DEVON_SCOPE, 2, 2);
+    StringCopy(gStringVar4, gText_NumberClear01);
+    StringAppend(gStringVar4, gStringVar1);
+    BuyMenuPrint(windowId, FONT_SMALL, gStringVar4, 8, 0, 0, 0, TEXT_SKIP_DRAW, 1);
+    StringCopy(gStringVar4, gMoveNames[ItemIdToBattleMoveId(item)]);
+
+    BuyMenuPrint(windowId, FONT_NORMAL, gStringVar4, 8, 0xa, 0, 0, 0, 1);
+}
+
+static void LoadTmHmNameCompabilityCancelInMart(s32 item)
+{
+    u8 windowId = 6;
+    BuyMenuPrint(6, FONT_SMALL, gText_ThreeHyphens, 8, 0, 0, 0, TEXT_SKIP_DRAW, 1);
+    BuyMenuPrint(6, FONT_NORMAL, gText_SevenHyphens, 8, 0x10, 0, 0, 0, 1);
+}
+
+static void LoadTmHmNameCompabilityIconsInMart(s32 item)
+{
+    u8 i, count, groupingSize, spriteSize, windowId;
+    u8 *txtPtr;
+    u16 species;
+    u32 personality;
+    s16 x, y, x_offset, y_offset;
+    struct Coords16 startingPosition;
+
+    count = 0;
+    groupingSize = 6;
+    spriteSize = 32;
+    windowId = 6;
+    GetCoordFromWindow(&startingPosition, windowId, 10, 65);
+    x = startingPosition.x;
+    y = startingPosition.y;
+
+    for(i  = 0; i < gPlayerPartyCount; i++)
     {
-        BuyMenuPrint(6, FONT_SMALL, gText_ThreeHyphens, 0, 0, 0, 0, TEXT_SKIP_DRAW, 1);
-        BuyMenuPrint(6, FONT_NORMAL, gText_SevenHyphens, 0, 0x10, 0, 0, 0, 1);
+        species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG);
+        if(species == SPECIES_NONE) continue;
+        if(!CanMonLearnTMHM(&gPlayerParty[i], item - ITEM_TM01_FOCUS_PUNCH)) continue;
+        
+        personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY);
+
+        SafeLoadMonIconPalette(species);
+        sPokemonIconSpriteIds[i] = CreateMonIcon(species, SpriteCallbackDummy, 0, 0, 0, personality, 1);
+
+        x_offset = gSprites[sPokemonIconSpriteIds[i]].centerToCornerVecX * (count % groupingSize) * -1 * 1.15;
+        y_offset = gSprites[sPokemonIconSpriteIds[i]].centerToCornerVecY * (count / groupingSize) * -1 * 1.15;
+        
+        gSprites[sPokemonIconSpriteIds[i]].x = startingPosition.x + x_offset;
+        gSprites[sPokemonIconSpriteIds[i]].y = startingPosition.y + y_offset;
+        gSprites[sPokemonIconSpriteIds[i]].oam.priority = 0;
+        gSprites[sPokemonIconSpriteIds[i]].hFlip = !IsMonSpriteNotFlipped(species);
+
+        count++;
+    }
+    
+}
+static void CleanupTmHmNameCompabilityIconsInMart(void)
+{
+    u8 i;    
+    for(i = 0; i < PARTY_SIZE; i++)
+    {
+        if(sPokemonIconSpriteIds[i] == SPRITE_NONE) continue;
+
+        DestroySpriteAndFreeResources(&gSprites[sPokemonIconSpriteIds[i]]);
+        sPokemonIconSpriteIds[i] = SPRITE_NONE;
     }
 }
 
@@ -1118,10 +1233,10 @@ static void RecordTransactionForQuestLog(void)
         SetQuestLogEvent(eventId + QL_EVENT_USED_POKEMART, (const u16 *)&sHistory[1]);
 }
 
-void CreatePokemartMenu(const u16 *itemsForSale)
+void CreatePokemartMenu(const u16 *itemsForSale, u8 martService)
 {
     SetShopItemsForSale(itemsForSale);
-    CreateShopMenu(MART_TYPE_REGULAR);
+    CreateShopMenu(MART_TYPE_REGULAR, martService);
     SetShopMenuCallback(ScriptContext_Enable);
     DebugFunc_PrintShopMenuHistoryBeforeClearMaybe();
     memset(&sHistory, 0, sizeof(sHistory));
@@ -1129,17 +1244,17 @@ void CreatePokemartMenu(const u16 *itemsForSale)
     sHistory[1].mapSec = gMapHeader.regionMapSectionId;
 }
 
-void CreateDecorationShop1Menu(const u16 *itemsForSale)
+void CreateDecorationShop1Menu(const u16 *itemsForSale, u8 martService)
 {
     SetShopItemsForSale(itemsForSale);
-    CreateShopMenu(MART_TYPE_DECOR);
+    CreateShopMenu(MART_TYPE_DECOR, martService);
     SetShopMenuCallback(ScriptContext_Enable);
 }
 
-void CreateDecorationShop2Menu(const u16 *itemsForSale)
+void CreateDecorationShop2Menu(const u16 *itemsForSale, u8 martService)
 {
     SetShopItemsForSale(itemsForSale);
-    CreateShopMenu(MART_TYPE_DECOR2);
+    CreateShopMenu(MART_TYPE_DECOR2, martService);
     SetShopMenuCallback(ScriptContext_Enable);
 }
 

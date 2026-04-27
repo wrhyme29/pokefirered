@@ -17,6 +17,7 @@ void SortAndCompactBagPocket(struct BagPocket * pocket);
 
 // Item descriptions and data
 #include "data/items.h"
+EWRAM_DATA u16 gPriceOverrides[ITEMS_COUNT] = {0xFF};
 
 u16 GetBagItemQuantity(u16 * ptr)
 {
@@ -620,7 +621,11 @@ u16 ItemId_GetId(u16 itemId)
 
 u16 ItemId_GetPrice(u16 itemId)
 {
-    return gItems[SanitizeItemId(itemId)].price;
+    u16 sanitizedItemId, overridePrice;
+    sanitizedItemId = SanitizeItemId(itemId);
+    overridePrice = GetPriceOverride(sanitizedItemId);
+    if(overridePrice != 0xFFFF) return overridePrice;
+    return gItems[sanitizedItemId].price;
 }
 
 u8 ItemId_GetHoldEffect(u16 itemId)
@@ -677,4 +682,25 @@ ItemUseFunc ItemId_GetBattleFunc(u16 itemId)
 u8 ItemId_GetSecondaryId(u16 itemId)
 {
     return gItems[SanitizeItemId(itemId)].secondaryId;
+}
+
+bool8 AddPriceOverride(u16 itemId, u16 newPrice)
+{
+    if(itemId >= ITEMS_COUNT) return FALSE;
+    gPriceOverrides[itemId] = newPrice;
+    return TRUE;
+}
+
+u16 GetPriceOverride(u16 itemId)
+{
+    return gPriceOverrides[SanitizeItemId(itemId)];
+}
+
+void ClearPriceOverrides(void)
+{
+    u16 i;
+    for(i = 0; i < ITEMS_COUNT; i++)
+    {
+        gPriceOverrides[i] = 0xFF;
+    }
 }

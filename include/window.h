@@ -70,6 +70,7 @@ void CopyWindowToVram8Bit(u8 windowId, u8 mode);
 
 void PutWindowTilemap(u8 windowId);
 void PutWindowRectTilemapOverridePalette(u8 windowId, u8 x, u8 y, u8 width, u8 height, u8 palette);
+void GetCoordFromWindow( struct Coords16 * position, u8 windowId, u8 xPercent, u8 yPercent);
 void ClearWindowTilemap(u8 windowId);
 void PutWindowRectTilemap(u8 windowId, u8 x, u8 y, u8 width, u8 height);
 void BlitBitmapToWindow(u8 windowId, const u8 *pixels, u16 x, u16 y, u16 width, u16 height);

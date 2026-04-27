@@ -277,6 +277,16 @@ void PutWindowRectTilemapOverridePalette(u8 windowId, u8 x, u8 y, u8 width, u8 h
     }
 }
 
+void GetCoordFromWindow( struct Coords16 * position, u8 windowId, u8 xPercent, u8 yPercent)
+{
+    u8 tileSize = 8;
+    struct Window windowLocal = gWindows[windowId];
+    position->x = windowLocal.window.tilemapLeft * tileSize 
+                    + xPercent * windowLocal.window.width * tileSize / 100;
+    position->y = windowLocal.window.tilemapTop * tileSize 
+                    + yPercent * windowLocal.window.height * tileSize / 100;
+}
+
 void ClearWindowTilemap(u8 windowId)
 {
     struct Window windowLocal = gWindows[windowId];
@@ -466,10 +476,16 @@ bool8 SetWindowAttribute(u8 windowId, u8 attributeId, u32 value)
     case WINDOW_BASE_BLOCK:
         gWindows[windowId].window.baseBlock = value;
         return FALSE;
-    case WINDOW_TILE_DATA:
     case WINDOW_BG:
+        gWindows[windowId].window.bg = value;
+        return FALSE;
     case WINDOW_WIDTH:
+        gWindows[windowId].window.width = value;
+        return FALSE;
     case WINDOW_HEIGHT:
+        gWindows[windowId].window.height = value;
+        return FALSE;
+    case WINDOW_TILE_DATA:
     default:
         return TRUE;
     }

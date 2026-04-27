@@ -462,4 +462,9 @@
 // Check if the item is one that can be used on a Pokemon.
 #define IS_POKEMON_ITEM(item) ((item) >= ITEM_POTION && (item) <= MAX_BERRY_INDEX)
 
+// Mart Service types for buying or selling
+#define MART_SERVICE_BUY_SELL 0
+#define MART_SERVICE_BUY 1
+#define MART_SERVICE_SELL 2
+
 #endif  // GUARD_CONSTANTS_ITEMS_H

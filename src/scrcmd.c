@@ -523,6 +523,21 @@ bool8 ScrCmd_checkpcitem(struct ScriptContext * ctx)
     return FALSE;
 }
 
+bool8 ScrCmd_addpriceoverride(struct ScriptContext * ctx)
+{
+    u16 itemId = VarGet(ScriptReadHalfword(ctx));
+    u16 newPrice = VarGet(ScriptReadHalfword(ctx));
+
+    gSpecialVar_Result = AddPriceOverride(itemId, newPrice);
+    return FALSE;
+}
+
+bool8 ScrCmd_clearpriceoverrides(struct ScriptContext * ctx)
+{
+    ClearPriceOverrides();
+    return FALSE;
+}
+
 bool8 ScrCmd_adddecoration(struct ScriptContext * ctx)
 {
     u32 decorId = VarGet(ScriptReadHalfword(ctx));
@@ -1972,18 +1987,20 @@ bool8 ScrCmd_dowildbattle(struct ScriptContext * ctx)
 
 bool8 ScrCmd_pokemart(struct ScriptContext * ctx)
 {
-    const void *ptr = (void *)ScriptReadWord(ctx);
+    const void *itemsForSale = (void *)ScriptReadWord(ctx);
+    u8 martService = ScriptReadByte(ctx);
 
-    CreatePokemartMenu(ptr);
+    CreatePokemartMenu(itemsForSale, martService);
     ScriptContext_Stop();
     return TRUE;
 }
 
 bool8 ScrCmd_pokemartdecoration(struct ScriptContext * ctx)
 {
-    const void *ptr = (void *)ScriptReadWord(ctx);
+    const void *itemsForSale = (void *)ScriptReadWord(ctx);
+    u8 martService = ScriptReadByte(ctx);
 
-    CreateDecorationShop1Menu(ptr);
+    CreateDecorationShop1Menu(itemsForSale, martService);
     ScriptContext_Stop();
     return TRUE;
 }
@@ -1991,9 +2008,9 @@ bool8 ScrCmd_pokemartdecoration(struct ScriptContext * ctx)
 // Changes clerk dialogue slightly from above. See MART_TYPE_DECOR2
 bool8 ScrCmd_pokemartdecoration2(struct ScriptContext * ctx)
 {
-    const void *ptr = (void *)ScriptReadWord(ctx);
-
-    CreateDecorationShop2Menu(ptr);
+    const void *itemsForSale = (void *)ScriptReadWord(ctx);
+    u8 martService = ScriptReadByte(ctx);
+    CreateDecorationShop2Menu(itemsForSale, martService);
     ScriptContext_Stop();
     return TRUE;
 }
