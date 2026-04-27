@@ -103,6 +103,17 @@ static const struct ItemSlot gNewGamePCItems[] = {
     { ITEM_NONE,   0 }
 };
 
+static const u16 gNewGamePCPokemon[] = {
+    SPECIES_VULPIX,
+    SPECIES_EEVEE,
+    SPECIES_GROWLITHE,
+    SPECIES_BULBASAUR,
+    SPECIES_ODDISH,
+    SPECIES_PIDGEY,
+    SPECIES_RATTATA,
+    0xFFFF
+};
+
 static const struct MenuAction sMenuActions_MailSubmenu[] = {
     {gOtherText_Read, Task_PlayerPcReadMail},
     {gOtherText_MoveToBag, Task_PlayerPcMoveMailToBag},
@@ -147,6 +158,18 @@ void NewGameInitPCItems(void)
     for (i = 0, ClearPCItemSlots(); NEW_GAME_PC_ITEMS(i, PC_ITEM_ID) && NEW_GAME_PC_ITEMS(i, PC_QUANTITY) &&
                                     AddPCItem(NEW_GAME_PC_ITEMS(i, PC_ITEM_ID), NEW_GAME_PC_ITEMS(i, PC_QUANTITY)) == TRUE; i++)
         ;
+
+}
+
+void NewGameInitPCPokemon(void)
+{
+    struct Pokemon pokemon;
+    u8 i;
+    for(i = 0; gNewGamePCPokemon[i] != 0xFFFF; i++)
+    {
+        CreateMon(&pokemon, gNewGamePCPokemon[i], 5, USE_RANDOM_IVS, FALSE, 0, OT_ID_PLAYER_ID, 0);
+        SendMonToPC(&pokemon); 
+    }   
 }
 
 void BedroomPC(void)

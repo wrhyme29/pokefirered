@@ -24,6 +24,7 @@ extern struct PlayerPCItemPageStruct gPlayerPcMenuManager;
 // Exported ROM declarations
 
 void NewGameInitPCItems(void);
+void NewGameInitPCPokemon(void);
 void Mailbox_ReturnToMailListAfterDeposit(void);
 
 #endif //GUARD_PLAYER_PC_H
