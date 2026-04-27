@@ -386,9 +386,35 @@ PalletTown_Movement_SignLadyMoveOutOfWayLeft::
 	walk_in_place_faster_right
 	step_end
 
-PalletTown_EventScript_FatMan::
-	msgbox PalletTown_Text_CanStoreItemsAndMonsInPC, MSGBOX_NPC
+PalletTown_EventScript_WeatherEnthusiast::
+	goto_if_questlog EventScript_ReleaseEnd
+	lock
+	faceplayer
+	message PalletTown_Text_WeatherEnthusiast_Offer
+	waitmessage
+	call PalletTown_EventScript_WeatherEnthusiast_SetTMPriceOverrides
+	pokemart PalletTown_EventScript_WeatherEnthusiast_Weather_TMs MART_SERVICE_BUY
+	clearpriceoverrides
+	msgbox PalletTown_Text_WeatherEnthusiast_Bye
+	release
 	end
+
+	.align 2
+PalletTown_EventScript_WeatherEnthusiast_Weather_TMs::
+	.2byte ITEM_TM07
+	.2byte ITEM_TM11
+	.2byte ITEM_TM18
+	.2byte ITEM_TM37
+	.2byte ITEM_NONE
+	release
+	end
+
+PalletTown_EventScript_WeatherEnthusiast_SetTMPriceOverrides::
+	addpriceoverride ITEM_TM07 500
+	addpriceoverride ITEM_TM18 500
+	addpriceoverride ITEM_TM37 500
+	addpriceoverride ITEM_TM11 500
+	return
 
 PalletTown_EventScript_OaksLabSign::
 	lockall

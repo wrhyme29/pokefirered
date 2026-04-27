@@ -15,10 +15,15 @@ PalletTown_Text_RaisingMonsToo::
     .string "When they get strong, they can\n"
     .string "protect me.$"
 
-PalletTown_Text_CanStoreItemsAndMonsInPC::
-    .string "Technology is incredible!\p"
-    .string "You can now store and recall items\n"
-    .string "and POKéMON as data via PC.$"
+PalletTown_Text_WeatherEnthusiast_Offer::
+    .string "I love weather! Hail, sun, rain, and\n"
+    .string "sand - each changes battles!\p"
+    .string "I can get you weather TMs at a\n"
+    .string "steep discount. Interested?$"
+
+PalletTown_Text_WeatherEnthusiast_Bye::
+    .string "Come back anytime - the forecast is\n"
+    .string "always changing!$"
 
 PalletTown_Text_OakPokemonResearchLab::
     .string "OAK POKéMON RESEARCH LAB$"
