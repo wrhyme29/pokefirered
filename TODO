@@ -3,3 +3,11 @@
 - ~~Fix icon not disappearing after move is used~~
 - ~~Fix whatever happens when a battle loads~~
 - ~~Add property to all moves~~
+- Fix fight in Oaks Lab
+- Show category on TM description screen
+
+## TMs and Price Overrides
+- ~~Late in game all prices are 0~~
+- ~~Unable to sell any items~~
+- ~~Cannot purchase more than one item at a time~~
+- Sprites for TMs sometimes arbitrarily break and don't come back
