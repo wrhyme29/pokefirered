@@ -424,6 +424,7 @@ const u8 gText_SodaPop_300[] = _("SODA POP{CLEAR_TO 0x57}{FONT_SMALL}¥300");
 const u8 gText_Lemonade_350[] = _("LEMONADE{CLEAR_TO 0x57}{FONT_SMALL}¥350");
 const u8 gText_50Coins_1000[] = _("{FONT_SMALL} 50 COINS{CLEAR_TO 0x45}¥1,000");
 const u8 gText_500Coins_10000[] = _("{FONT_SMALL}500 COINS{CLEAR_TO 0x40}¥10,000");
+const u8 gText_5000Coins_100000[] = _("{FONT_SMALL}5000 COINS{CLEAR_TO 0x40}¥100,000");
 const u8 gText_Excellent[] = _("Excellent");
 const u8 gText_NotSoBad[] = _("Not so bad");
 const u8 gText_RedShard[] = _("RED SHARD");
