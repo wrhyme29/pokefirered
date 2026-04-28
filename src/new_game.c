@@ -102,6 +102,7 @@ void ResetMenuAndMonGlobals(void)
     ResetQuestLog();
     SeedWildEncounterRng(Random());
     ResetSpecialVars();
+    ClearPriceOverrides();
 }
 
 void NewGameInitData(void)
@@ -145,6 +146,7 @@ void NewGameInitData(void)
     ResetMiniGamesResults();
     ClearMysteryGift();
     SetAllRenewableItemFlags();
+    ClearPriceOverrides();
     WarpToPlayersRoom();
     RunScriptImmediately(EventScript_ResetAllMapFlags);
     StringCopy(gSaveBlock1Ptr->rivalName, rivalName);

@@ -17,7 +17,7 @@ void SortAndCompactBagPocket(struct BagPocket * pocket);
 
 // Item descriptions and data
 #include "data/items.h"
-EWRAM_DATA u16 gPriceOverrides[ITEMS_COUNT] = {0xFF};
+EWRAM_DATA u16 gPriceOverrides[ITEMS_COUNT] = {};
 
 u16 GetBagItemQuantity(u16 * ptr)
 {
@@ -701,6 +701,6 @@ void ClearPriceOverrides(void)
     u16 i;
     for(i = 0; i < ITEMS_COUNT; i++)
     {
-        gPriceOverrides[i] = 0xFF;
+        gPriceOverrides[i] = 0xFFFF;
     }
 }
